@@ -1,0 +1,68 @@
+#include <iostream>
+#include <utility>
+#include <sstream>
+
+using namespace std;
+
+bool read (istream & stream, double* &A, unsigned int &razmer) {
+    bool result = true;
+    for (unsigned int i=0; i < razmer; i++) {
+        if (!(stream >> A[i])) {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
+void write(ostream & stream,double * A, unsigned int razmer) {
+    for (unsigned int i = 0; i < razmer; i++) {
+         stream << A[i] << ' ';
+    }
+}
+
+void merge_sort(double *A, int l, int r) {
+    int sr = (l + r) / 2;
+    if (l==r) {
+        return;
+    }
+    merge_sort(A, l, sr);
+    merge_sort(A, sr + 1, r);
+    double *tmp = new double[r];
+    int i = l;
+    int j = sr + 1;
+    for(int step = 0; step < r - l + 1; step++) {
+  	    if((j>r) || ((i <= sr) && (A[i] < A[j]))) {
+  		    tmp[step] = A[i];
+  		    i++;
+	    }
+            else {
+    	    	tmp[step] = A[j];
+    	    	j++;
+	    }
+    }
+    for (int step = 0; step < r - l + 1; step++) {
+        A[l + step] = tmp[step];
+    }
+  }
+
+int main() {
+    unsigned int razmer;
+    double* A;
+    if(!(cin >> razmer)) {
+        cout << "An error has occured while reading numbers from line";
+        return 1;
+    }
+    cin.get();
+    string stroka;
+    getline(cin, stroka);
+    istringstream stream(stroka);
+    A = new double [razmer];
+    if( read(stream,A, razmer)) {
+        merge_sort(A, 0, razmer-1);
+        write (cout, A, razmer);
+    }
+    else {
+        cout << "An error has occured while reading numbers from line";
+    }
+   }
