@@ -1,0 +1,59 @@
+#include <iostream>
+#include <utility>
+#include <sstream>
+
+using namespace std;
+
+bool read (istream & stream, double* &A, unsigned int &razmer) {
+    bool result = true;
+    for (unsigned int i=0; i < razmer; i++) {
+        if (!(stream >> A[i])) {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
+void write(ostream & stream,double* A, unsigned int razmer) {
+    for (unsigned int i = 0; i < razmer; i++) {
+         stream << A[i] << ' ';
+    }
+}
+
+void quick_sort(double *A, int left, int right) {
+    int l = left, r = right;
+    int p = l;
+    while (l <= r){
+        while (A[l] < A[p] && l <= right) l++;
+        while (A[r] > A[p] && r >=left) r--;
+        if (l <= r)
+        {
+            swap(A[l],A[r]);
+            l++; r--;
+        }
+    }
+    if (l < right) quick_sort(A, l, right);
+    if (r > left) quick_sort(A, left, r);
+}
+
+int main() {
+    unsigned int razmer;
+    double* A;
+    if(!(cin >> razmer)) {
+        cout << "An error has occured while reading numbers from line";
+        return 1;
+    }
+    cin.get();
+    string stroka;
+    getline(cin, stroka);
+    istringstream stream(stroka);
+    A = new double [razmer];
+    if( read(stream,A, razmer)) {
+        quick_sort(A, 0, razmer-1);
+        write (cout, A, razmer);
+    }
+    else {
+        cout << "An error has occured while reading numbers from line";
+    }
+   }
